@@ -33,7 +33,7 @@ class RecordVideoViewController: UIViewController {
         }
     }
 
-  func startCameraFromViewController(viewController: UIViewController, withDelegate delegate: protocol<UIImagePickerControllerDelegate, UINavigationControllerDelegate>) -> Bool {
+    func startCameraFromViewController(viewController: UIViewController, withDelegate delegate: UIImagePickerControllerDelegate & UINavigationControllerDelegate) -> Bool {
     if UIImagePickerController.isSourceTypeAvailable(.camera) == false {
       return false
     }
@@ -65,17 +65,19 @@ class RecordVideoViewController: UIViewController {
 // MARK: - UIImagePickerControllerDelegate
 
 extension RecordVideoViewController: UIImagePickerControllerDelegate {
-  func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        print("didfinishpickingmediawithinfo")
     let mediaType = info[UIImagePickerControllerMediaType] as! NSString
     dismiss(animated: true, completion: nil)
     // Handle a movie capture
     if mediaType == kUTTypeMovie {
       guard let path = (info[UIImagePickerControllerMediaURL] as! NSURL).path else { return }
       if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path) {
-        UISaveVideoAtPathToSavedPhotosAlbum(path, self, #selector(video), nil)
+        UISaveVideoAtPathToSavedPhotosAlbum(path, self, #selector(RecordVideoViewController.video(videoPath:didFinishSavingWithError:contextInfo:)), nil)
       }
     }
   }
+    
 }
 
 // MARK: - UINavigationControllerDelegate
