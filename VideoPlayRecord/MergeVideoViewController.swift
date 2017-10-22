@@ -113,12 +113,13 @@ class MergeVideoViewController: UIViewController {
         }
     }
   
-    @IBAction func loadAudio(_ sender: Any) {
+    @IBAction func loadAudio(_ sender: UIButton) {
         let mediaPickerController = MPMediaPickerController(mediaTypes: .any)
         mediaPickerController.delegate = self
         mediaPickerController.prompt = "Select Audio"
         present(mediaPickerController, animated: true, completion: nil)
     }
+
 
   func orientationFromTransform(transform: CGAffineTransform) -> (orientation: UIImageOrientation, isPortrait: Bool) {
     var assetOrientation = UIImageOrientation.up
@@ -266,36 +267,37 @@ extension MergeVideoViewController: UIImagePickerControllerDelegate {
         present(alert, animated: true, completion: nil)
     }
   }
+    
   
 }
 
 extension MergeVideoViewController: UINavigationControllerDelegate {
   
 }
-
-extension MergeVideoViewController: MPMediaPickerControllerDelegate {
-  func mediaPicker(mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection) {
-    let selectedSongs = mediaItemCollection.items
-    if selectedSongs.count > 0 {
-      let song = selectedSongs[0]
-        if let url = song.value(forProperty: MPMediaItemPropertyAssetURL) as? NSURL {
-            audioAsset = (AVAsset(url:url as URL) )
+extension MergeVideoViewController: MPMediaPickerControllerDelegate{
+    func mediaPicker(_ mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection) {
+        let selectedSongs = mediaItemCollection.items
+        print("mediaPicker didPickMediaItem")
+        if selectedSongs.count > 0 {
+            let song = selectedSongs[0]
+            if let url = song.value(forProperty: MPMediaItemPropertyAssetURL) as? NSURL {
+                audioAsset = (AVAsset(url:url as URL) )
+                dismiss(animated: true, completion: nil)
+                let alert = UIAlertController(title: "Asset Loaded", message: "Audio Loaded", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler:nil))
+                present(alert, animated: true, completion: nil)
+            } else {
+                dismiss(animated: true, completion: nil)
+                let alert = UIAlertController(title: "Asset Not Available", message: "Audio Not Loaded", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler:nil))
+                present(alert, animated: true, completion: nil)
+            }
             dismiss(animated: true, completion: nil)
-            let alert = UIAlertController(title: "Asset Loaded", message: "Audio Loaded", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler:nil))
-            present(alert, animated: true, completion: nil)
-      } else {
+            
+        } else {
             dismiss(animated: true, completion: nil)
-            let alert = UIAlertController(title: "Asset Not Available", message: "Audio Not Loaded", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler:nil))
-            present(alert, animated: true, completion: nil)
-      }
-    } else {
-        dismiss(animated: true, completion: nil)
+        }
     }
-  }
-  
-  func mediaPickerDidCancel(mediaPicker: MPMediaPickerController) {
-    dismiss(animated: true, completion: nil)
-  }
-}
+    }
+
+
