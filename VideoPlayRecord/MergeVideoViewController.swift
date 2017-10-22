@@ -248,26 +248,26 @@ class MergeVideoViewController: UIViewController {
 }
 
 extension MergeVideoViewController: UIImagePickerControllerDelegate {
-  func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-    let mediaType = info[UIImagePickerControllerMediaType] as! NSString
-    dismiss(animated: true, completion: nil)
-    
-    if mediaType == kUTTypeMovie {
-        let avAsset = AVAsset(url:(info[UIImagePickerControllerMediaURL] as! NSURL) as URL)
-      var message = ""
-      if loadingAssetOne {
-        message = "Video one loaded"
-        firstAsset = avAsset
-      } else {
-        message = "Video two loaded"
-        secondAsset = avAsset
-      }
-        let alert = UIAlertController(title: "Asset Loaded", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let mediaType = info[UIImagePickerControllerMediaType] as! NSString
+        dismiss(animated: true, completion: nil)
+        
+        if mediaType == kUTTypeMovie {
+            let avAsset = AVAsset(url:(info[UIImagePickerControllerMediaURL] as! NSURL) as URL)
+            var message = ""
+            if loadingAssetOne {
+                message = "Video one loaded"
+                firstAsset = avAsset
+            } else {
+                message = "Video two loaded"
+                secondAsset = avAsset
+            }
+            let alert = UIAlertController(title: "Asset Loaded", message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
+        }
     }
-  }
-    
+
   
 }
 
